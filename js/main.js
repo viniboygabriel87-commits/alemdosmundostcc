@@ -44,7 +44,7 @@
       acum += dt * 1000;
       if (acum >= AM.Config.AUTOSAVE_MS) { acum = 0; if (!AM.Modal.aberto() && !AM.World.cutAtivo()) AM.SaveSystem.salvar('auto'); }
       const a = document.getElementById('tb-a'); if (a) a.classList.toggle('pronto', !!AM.World.alvo());
-    } else AM.Menu.animar(ts / 1000);
+    } else { AM.World.ocultarDica(); AM.Menu.animar(ts / 1000); }
     requestAnimationFrame(quadro);
   }
 

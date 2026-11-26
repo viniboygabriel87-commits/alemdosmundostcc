@@ -5,7 +5,7 @@
   const AM = window.AM, U = AM.util, G = AM.Gfx, T = AM.Config.TILE, M = AM.Data.mapa;
   const WPX = M.w * T, HPX = M.h * T;
 
-  let canvas, ctx, vw = 480, vh = 270, ps = 3;
+  let canvas, ctx, dicaInteracao, vw = 480, vh = 270, ps = 3;
   let chao = null, construido = false;
   let colisores = [], objetos = [], flores = [], interativos = [], npcs = {}, particulas = [], brilhos = [];
   const jogador = { x: 0, y: 0, dir: 'up', anim: 0, passo: 0 };
@@ -334,7 +334,7 @@
   }
 
   const World = (AM.World = {
-    iniciar(cv) { canvas = cv; ctx = cv.getContext('2d'); construir(); this.redimensionar(window.innerWidth, window.innerHeight); },
+    iniciar(cv) { canvas = cv; ctx = cv.getContext('2d'); dicaInteracao = document.getElementById('dica-interacao'); construir(); this.redimensionar(window.innerWidth, window.innerHeight); },
     redimensionar(w, h) {
       ps = Math.max(2, Math.round(Math.min(w / 400, h / 240)));
       vw = Math.ceil(w / ps); vh = Math.ceil(h / ps);
@@ -491,6 +491,7 @@
       }
     },
     desenharMarcas(c, ox, oy) {
+      if (dicaInteracao) dicaInteracao.hidden = true;
       if (this.bloqueado()) return;
       const ativos = new Set(AM.Quests.todosAtivos().map((a) => a.passo.alvo));
       interativos.forEach((i) => {
@@ -504,14 +505,17 @@
       if (alvo) {
         const tecla = AM.Input.descrever('interagir').replace(/^o botão /, '').replace('botão ', '');
         const txt = `${tecla.length > 6 ? 'A' : tecla} · ${alvo.rotulo}`;
-        c.font = '8px "Pixelify Sans", monospace'; c.textBaseline = 'middle'; c.textAlign = 'center';
-        const w = Math.ceil(c.measureText(txt).width) + 10, bx = Math.round(alvo.ponto.x - ox), by = Math.round(alvo.ponto.y - oy - 10 - (reduz() ? 0 : Math.sin(t * 4) * 1.2));
-        c.fillStyle = '#1d1726'; c.fillRect(bx - w / 2 - 1, by - 8, w + 2, 15);
-        c.fillStyle = '#f4ecd8'; c.fillRect(bx - w / 2, by - 7, w, 13);
-        c.fillStyle = '#1d1726'; c.fillText(txt, bx, by);
-        c.fillStyle = '#1d1726'; c.fillRect(bx - 2, by + 7, 5, 2); c.fillRect(bx - 1, by + 9, 3, 1);
+        const bx = alvo.ponto.x - ox, by = alvo.ponto.y - oy - 10 - (reduz() ? 0 : Math.sin(t * 4) * 1.2);
+        if (dicaInteracao) {
+          const canvasRect = canvas.getBoundingClientRect(), appRect = canvas.parentElement.getBoundingClientRect();
+          dicaInteracao.textContent = txt;
+          dicaInteracao.style.left = `${canvasRect.left - appRect.left + bx * (canvasRect.width / canvas.width)}px`;
+          dicaInteracao.style.top = `${canvasRect.top - appRect.top + by * (canvasRect.height / canvas.height)}px`;
+          dicaInteracao.hidden = false;
+        }
       }
     },
+    ocultarDica() { if (dicaInteracao) dicaInteracao.hidden = true; },
   });
 
   /* ───────── reação às melhorias ───────── */

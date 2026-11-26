@@ -30,8 +30,9 @@
         const opcoes = el('div', { class: 'dlg-opcoes', role: 'group' });
         const dica = el('span', { class: 'dlg-seta', 'aria-hidden': 'true', texto: '▼' });
         const retr = el('canvas', { class: 'dlg-retrato', width: 48, height: 48, 'aria-hidden': 'true' });
+        const moldura = el('div', { class: 'dlg-retrato-moldura', 'aria-hidden': 'true' }, retr);
         const caixa = el('div', { class: 'dlg-caixa' }, quem, texto, opcoes, dica);
-        const box = el('div', { class: 'dialogo', role: 'dialog', 'aria-label': 'Conversa' }, retr, caixa);
+        const box = el('div', { class: 'dialogo', role: 'dialog', 'aria-label': 'Conversa' }, moldura, caixa);
         AM.UI.camada().append(box);
 
         let no = null, noId = null, timer = null, completo = true, sel = 0, botoes = [], fimAcoes = null, fechado = false;
