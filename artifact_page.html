@@ -1,0 +1,54 @@
+<title>Além dos Muros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>html,body{height:100%;margin:0;background:#0d1117;overflow:hidden}</style>
+<div id="app">
+  <canvas id="jogo" aria-label="Mundo do jogo"></canvas>
+
+  <section id="menu" class="tela" hidden>
+    <canvas id="fundo-menu" aria-hidden="true"></canvas>
+    <div class="menu-conteudo">
+      <p class="menu-sobre">Uma aventura sobre aprender juntos</p>
+      <h1 class="titulo-jogo">Além dos <span>Muros</span></h1>
+      <nav class="menu-botoes" id="menu-botoes" aria-label="Menu principal"></nav>
+      <p class="menu-rodape" id="menu-rodape"></p>
+    </div>
+  </section>
+
+  <div id="hud" hidden></div>
+  <div id="toque" hidden>
+    <div class="joy" id="joy"><div class="joy-base"></div><div class="joy-knob"></div></div>
+    <div class="toque-botoes">
+      <button class="tb tb-correr" id="tb-correr" type="button" aria-label="Correr (segure)" tabindex="-1">Correr</button>
+      <button class="tb tb-a" id="tb-a" type="button" aria-label="Interagir" tabindex="-1">A</button>
+    </div>
+  </div>
+  <div id="camada-ui"></div>
+  <div id="toasts" aria-live="polite"></div>
+</div>
+
+<script src="js/core/config.js"></script>
+<script src="js/core/input.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/data/personagens.js"></script>
+<script src="js/data/mapa.js"></script>
+<script src="js/data/missoes.js"></script>
+<script src="js/data/puzzles.js"></script>
+<script src="js/data/dialogos.js"></script>
+<script src="js/data/itens.js"></script>
+<script src="js/data/rotas.js"></script>
+<script src="js/core/estado.js"></script>
+<script src="js/gfx/sprites.js"></script>
+<script src="js/systems/inventario.js"></script>
+<script src="js/systems/conhecimento.js"></script>
+<script src="js/systems/adaptativo.js"></script>
+<script src="js/systems/missoes.js"></script>
+<script src="js/systems/puzzles.js"></script>
+<script src="js/systems/dialogo.js"></script>
+<script src="js/world/mundo.js"></script>
+<script src="js/ui/ui.js"></script>
+<script src="js/ui/telas.js"></script>
+<script src="js/ui/menu.js"></script>
+<script src="js/main.js"></script>
