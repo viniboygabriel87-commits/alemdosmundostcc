@@ -411,4 +411,58 @@
     render();
     corpo._conectar = { ligs, v };
   });
+
+  /* ═════════ 5) CLASSIFICAR (catálogo de livros) ═════════ */
+  P.registrar('classificar', (corpo, v, api) => {
+    const atribuicoes = {}, selecionado = { id: null };
+    const cards = el('div', { class: 'cat-cartoes', role: 'group', 'aria-label': 'Livros sem prateleira' });
+    const prateleiras = el('div', { class: 'cat-prateleiras', role: 'group', 'aria-label': 'Prateleiras por assunto' });
+    const botoesLivros = {}, botoesPrateleiras = {}, contagens = {};
+    v.livros.forEach((livro) => {
+      const estado = el('small', { texto: 'Ainda sem prateleira' });
+      const b = el('button', { class: 'cat-cartao', type: 'button', 'aria-pressed': 'false', onclick: () => {
+        selecionado.id = selecionado.id === livro.id ? null : livro.id;
+        Object.keys(botoesLivros).forEach((id) => botoesLivros[id].setAttribute('aria-pressed', selecionado.id === id ? 'true' : 'false'));
+        api.mensagem(selecionado.id ? 'Agora escolha a prateleira para esse livro.' : 'Seleção cancelada.', '');
+      } }, livro.texto, estado);
+      botoesLivros[livro.id] = b; cards.append(b);
+    });
+    v.prateleiras.forEach((prateleira) => {
+      const contagem = el('small', { texto: '0 livros' });
+      const b = el('button', { class: 'cat-prateleira', type: 'button', onclick: () => {
+        if (!selecionado.id) { api.mensagem('Escolha primeiro um livro.', ''); return; }
+        atribuicoes[selecionado.id] = prateleira.id;
+        selecionado.id = null;
+        render();
+        api.mensagem('Livro colocado. Você pode mudar a prateleira antes de verificar.', 'ok');
+      } }, prateleira.nome, contagem);
+      botoesPrateleiras[prateleira.id] = b; contagens[prateleira.id] = contagem; prateleiras.append(b);
+    });
+    corpo.append(cards, prateleiras);
+
+    function render() {
+      v.livros.forEach((livro) => {
+        const b = botoesLivros[livro.id], idPrateleira = atribuicoes[livro.id];
+        b.setAttribute('aria-pressed', selecionado.id === livro.id ? 'true' : 'false');
+        b.querySelector('small').textContent = idPrateleira
+          ? 'Prateleira: ' + v.prateleiras.find((p) => p.id === idPrateleira).nome
+          : 'Ainda sem prateleira';
+      });
+      Object.keys(botoesPrateleiras).forEach((id) => {
+        botoesPrateleiras[id].classList.toggle('destino', !!selecionado.id);
+        const total = Object.values(atribuicoes).filter((destino) => destino === id).length;
+        contagens[id].textContent = total + (total === 1 ? ' livro' : ' livros');
+      });
+    }
+
+    api.definirVerificar(() => {
+      const faltam = v.livros.filter((livro) => !atribuicoes[livro.id]).length;
+      if (faltam) { api.mensagem(`Ainda faltam ${faltam} ${faltam === 1 ? 'livro' : 'livros'} para organizar.`, ''); return; }
+      const certos = v.livros.filter((livro) => atribuicoes[livro.id] === livro.prateleira).length;
+      if (certos === v.livros.length) { api.mensagem('Todos os livros estão no lugar certo!', 'ok'); api.resolver(); }
+      else api.erro(`${certos} de ${v.livros.length} livros estão na prateleira certa. Confira os assuntos.`);
+    });
+    render();
+    corpo._classificar = { atribuicoes, v, render };
+  });
 })();

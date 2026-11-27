@@ -353,7 +353,7 @@
 
   /* ───── prédios ───── */
   function edificio(def, aceso, aberta) {
-    const key = `e|${def.id}|${aceso ? 1 : 0}`;
+    const key = `e|${def.id}|${aceso ? 1 : 0}|${aberta ? 1 : 0}`;
     if (cache.has(key)) return cache.get(key);
     const W = def.w * 16, H = def.h * 16, [c, g] = mk(W, H);
     const rh = Math.round(H * 0.46), wall = def.wall, roof = def.roof;
@@ -376,6 +376,10 @@
     if (isEscola && aceso) {
       R(g, '#ffd98a', dx, dy, dw, dh); R(g, '#fff0c0', dx + 3, dy + 3, dw - 6, dh - 8);
       R(g, '#a8774f', dx, dy, 3, dh); R(g, '#a8774f', dx + dw - 3, dy, 3, dh);
+    } else if (def.id === 'biblioteca' && aberta) {
+      R(g, '#251e2b', dx, dy, dw, dh); R(g, '#6b4a2e', dx, dy, 4, dh);
+      R(g, '#9a7448', dx + 4, dy + 3, 2, dh - 6); R(g, '#f5b942', dx + dw - 5, dy + dh / 2, 2, 2);
+      R(g, '#d94b4b', dx + 9, dy + 8, 3, 6); R(g, '#4a7bb0', dx + 13, dy + 6, 3, 8);
     } else if (def.id === 'biblioteca') {
       R(g, '#6b4a2e', dx, dy, dw, dh); R(g, '#8a6240', dx, dy, dw, 1);
       R(g, '#9a7448', dx - 3, dy + 4, dw + 6, 4); R(g, '#9a7448', dx - 3, dy + 14, dw + 6, 4); R(g, '#9a7448', dx - 3, dy + 22, dw + 6, 4);

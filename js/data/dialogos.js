@@ -203,6 +203,33 @@ AM.Data.dialogos = {
     } },
   ],
 
+  /* ───── Dona Clara ───── */
+  clara: [
+    { id: 'clara_aberta', cond: ['missao_concluida:biblioteca_reabertura'], inicio: 'a', nos: {
+      a: { quem: 'clara', expr: 'feliz', texto: 'Olhe só: as prateleiras estão organizadas e a porta está aberta! A biblioteca voltou a ser da comunidade.', prox: 'b' },
+      b: { quem: 'clara', expr: 'pensativa', texto: 'Aqui, cada leitor pode descobrir um caminho novo. Obrigada por me ajudar a devolver esses livros à vila.' },
+    } },
+    { id: 'clara_andamento', cond: ['missao_iniciada:biblioteca_reabertura'], inicio: 'a', nos: {
+      a: { quem: 'clara', expr: 'pensativa', texto: 'A biblioteca está quase pronta. A porta ao meu lado leva ao catálogo; organize os livros por assunto para eu poder reabri-la.' },
+    } },
+    { id: 'clara_adiada', cond: ['flag:biblioteca_adiada', '!missao_iniciada:biblioteca_reabertura'], inicio: 'a', nos: {
+      a: { quem: 'clara', expr: 'neutra', texto: 'Quando tiver um tempinho, ainda preciso de ajuda para organizar os livros da biblioteca.', opcoes: [
+        { texto: 'Vou ajudar agora.', prox: 'b', acoes: [{ missao: 'biblioteca_reabertura' }, { passo: 'biblioteca_reabertura.falar_clara' }, { flag: 'biblioteca_adiada', valor: false }] },
+        { texto: 'Depois eu volto.' },
+      ] },
+      b: { quem: 'clara', expr: 'feliz', texto: 'Que alegria! Vamos começar pelo catálogo na porta da biblioteca.' },
+    } },
+    { id: 'clara_convite', cond: ['feito:escola_luz.concluir_helena', '!missao_iniciada:biblioteca_reabertura'], inicio: 'a', nos: {
+      a: { quem: 'clara', expr: 'feliz', texto: 'Você ajudou a escola a voltar a receber alunos. Sou Dona Clara, e cuidei da biblioteca por muitos anos.', prox: 'b' },
+      b: { quem: 'clara', expr: 'pensativa', texto: 'Os livros ficaram fechados durante a reforma. Se organizarmos o catálogo, posso abrir as portas de novo.', opcoes: [
+        { texto: 'Quero ajudar a reabrir a biblioteca.', prox: 'c', acoes: [{ missao: 'biblioteca_reabertura' }, { passo: 'biblioteca_reabertura.falar_clara' }] },
+        { texto: 'Mais tarde.', prox: 'd', acoes: [{ flag: 'biblioteca_adiada' }] },
+      ] },
+      c: { quem: 'clara', expr: 'feliz', texto: 'Obrigada! Vamos catalogar os livros pela porta, e então a biblioteca será de todos outra vez.' },
+      d: { quem: 'clara', expr: 'neutra', texto: 'Tudo bem. Estarei por aqui durante o dia.' },
+    } },
+  ],
+
   /* ───── moradores da vila (conversas curtas que mudam com a história) ───── */
   beto: [
     { id: 'b_poco', cond: ['missao_concluida:poco_agua'], inicio: 'a', nos: {
@@ -280,6 +307,18 @@ AM.Data.dialogos = {
     { id: 'pe_c', inicio: 'a', nos: { a: { quem: 'narrador', texto: 'A porta da escola está encostada e lá dentro não há luz nenhuma. Melhor esperar a energia voltar.' } } },
   ],
   porta_biblioteca: [
+    { id: 'pb_aberta', cond: ['missao_concluida:biblioteca_reabertura'], inicio: 'a', nos: {
+      a: { quem: 'narrador', texto: 'A porta está aberta. Lá dentro, Dona Clara acolhe os primeiros leitores entre prateleiras organizadas.' },
+    } },
+    { id: 'pb_catalogo', cond: ['ativo:biblioteca_reabertura.catalogar'], inicio: 'a', nos: {
+      a: { quem: 'narrador', texto: 'Dona Clara abre a porta só o bastante para mostrar os livros sem etiqueta. Ajude a classificar cada título pela prateleira certa.', prox: 'b' },
+      b: { puzzle: 'catalogo', ok: 'c', cancelar: 'x' },
+      c: { quem: 'clara', expr: 'feliz', texto: 'Perfeito! Agora cada livro tem seu lugar. Vou tirar as tábuas e abrir a biblioteca para a comunidade.', acoes: [{ passo: 'biblioteca_reabertura.catalogar' }, { sfx: 'passoMissao' }] },
+      x: { quem: 'clara', expr: 'neutra', texto: 'Não precisa ter pressa. Os livros podem esperar mais um pouco.' },
+    } },
+    { id: 'pb_convite', cond: ['feito:escola_luz.concluir_helena'], inicio: 'a', nos: {
+      a: { quem: 'narrador', texto: 'A Biblioteca Esquecida continua fechada, mas Dona Clara está por perto durante o dia. Converse com ela para saber como ajudar.' },
+    } },
     { id: 'pb', inicio: 'a', nos: {
       a: { quem: 'narrador', texto: 'A porta da Biblioteca Esquecida está fechada com tábuas. Uma placa desbotada diz: “Fechada para reforma. Voltamos com mais livros. — Dona Clara”.', acoes: [{ flag: 'pista_biblioteca' }], prox: 'b' },
       b: { quem: 'narrador', texto: 'Pela fresta, você vê prateleiras cobertas de poeira e muitos livros esperando por leitores.' },

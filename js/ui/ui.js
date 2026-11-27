@@ -78,6 +78,7 @@
         el('button', { class: 'hud-btn', type: 'button', id: 'hud-diario', onclick: () => UI.abrirDiario() }, 'Diário'),
         el('button', { class: 'hud-btn', type: 'button', id: 'hud-menu', onclick: () => UI.abrirPausa() }, 'Menu')),
       el('div', { class: 'hud-pontos', id: 'hud-pontos', title: 'Pontos de conhecimento' }),
+      el('div', { class: 'hud-hora', id: 'hud-hora', 'aria-live': 'off' }),
       el('div', { class: 'hud-salvo', id: 'hud-salvo', 'aria-hidden': 'true' }, 'Jogo salvo'));
     ['hud-mochila', 'hud-diario', 'hud-menu', 'hud-obj'].forEach((id) => document.getElementById(id).setAttribute('tabindex', '-1'));
     ['passo', 'missao:iniciada', 'missao:concluida', 'adaptativo', 'inventario'].forEach((ev) => AM.Bus.on(ev, () => UI.atualizarHUD()));
@@ -109,6 +110,12 @@
     if (!nodes.length) nodes.push(el('span', { class: 'hud-passo', texto: 'Explore a vila.' }));
     o.replaceChildren(...nodes);
     p.textContent = `★ ${AM.GameState.dados.pontos}`;
+  };
+  UI.atualizarHorario = function (horario) {
+    const h = document.getElementById('hud-hora');
+    if (!h || !horario) return;
+    h.textContent = `${horario.texto} · ${horario.periodo}`;
+    h.classList.toggle('noite', horario.periodo === 'Noite');
   };
   UI.mostrarHUD = function (v) { document.getElementById('hud').hidden = !v; };
 

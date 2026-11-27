@@ -84,6 +84,8 @@
     melhoria(id) {
       if (AM.GameState.dados.melhorias[id]) return;
       AM.GameState.dados.melhorias[id] = true;
+      const melhoria = AM.Data.melhorias[id];
+      if (melhoria && melhoria.beneficio && melhoria.beneficio.regiao) AM.GameState.dados.regioes[melhoria.beneficio.regiao] = true;
       AM.GameState.marcar();
       AM.Bus.emit('melhoria', id);
     },

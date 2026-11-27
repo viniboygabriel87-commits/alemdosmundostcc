@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   const AM = window.AM;
-  let ultimo = 0, acum = 0;
+  let ultimo = 0, acum = 0, segundoRelogio = -1;
 
   function iniciar() {
     AM.Settings.carregar();
@@ -40,7 +40,11 @@
     AM.Input.atualizar();
     if (AM.Router.cena === 'jogo') {
       AM.World.atualizar(dt); AM.World.desenhar();
-      AM.GameState.dados.tempoJogo += dt;
+      if (!AM.Modal.aberto()) {
+        AM.GameState.dados.tempoJogo += dt;
+        const segundo = Math.floor(AM.GameState.dados.tempoJogo);
+        if (segundo !== segundoRelogio) { segundoRelogio = segundo; AM.UI.atualizarHorario(AM.World.horario()); }
+      }
       acum += dt * 1000;
       if (acum >= AM.Config.AUTOSAVE_MS) { acum = 0; if (!AM.Modal.aberto() && !AM.World.cutAtivo()) AM.SaveSystem.salvar('auto'); }
       const a = document.getElementById('tb-a'); if (a) a.classList.toggle('pronto', !!AM.World.alvo());

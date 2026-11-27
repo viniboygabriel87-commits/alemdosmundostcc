@@ -28,6 +28,7 @@ AM.Data.conhecimentos = [
   { id: 'k_feira', area: 'matematica', titulo: 'Fração, decimal e porcentagem', origem: 'puzzle:feira', texto: '1/2 = 0,5 = 50%. Calcular uma porcentagem de um valor é multiplicar: 25% de 60 = 60 × 0,25 = 15.' },
   { id: 'k_bilhete', area: 'portugues', titulo: 'Estrutura do bilhete', origem: 'puzzle:bilhete', texto: 'Um bilhete tem saudação, motivo, convite (quem, o quê, quando e onde) e despedida com assinatura.' },
   { id: 'k_historia', area: 'portugues', titulo: 'Começo, meio e fim', origem: 'puzzle:historia', texto: 'Uma narrativa organiza o tempo com marcadores como "primeiro", "em seguida" e "por fim". Frases fora do assunto quebram a coerência do texto.' },
+  { id: 'k_catalogo', area: 'portugues', titulo: 'Como funciona um catálogo', origem: 'puzzle:catalogo', texto: 'Um catálogo organiza livros por assunto e ajuda cada leitor a encontrar o que procura. O título dá pistas sobre o tema principal.' },
   { id: 'k_contos', area: 'portugues', titulo: 'Contar histórias', origem: 'livro:livro_contos', texto: 'Histórias de tradição oral ajudam a preservar a memória e a língua de uma comunidade e passam saberes de uma geração para outra.' },
   { id: 'k_atlas', area: 'conhecimentos', titulo: 'Ler um mapa', origem: 'livro:livro_atlas', texto: 'Um mapa usa legenda, escala e pontos cardeais. A escala diz quantas vezes o lugar real foi reduzido para caber no papel.' },
   { id: 'k_solar', area: 'logica', titulo: 'Energia do Sol', origem: 'livro:livro_ciencias', texto: 'Painéis solares transformam luz em eletricidade. Eles funcionam também em dias nublados, mas produzem menos do que sob sol forte.' },
@@ -43,7 +44,7 @@ AM.Data.locais = [
   { id: 'escola', nome: 'Escola', x: 38.5, y: 10, r: 8 },
   { id: 'oficina', nome: 'Oficina do Gabriel', x: 10, y: 11, r: 7 },
   { id: 'casa_lia', nome: 'Casa da Lia', x: 37, y: 30, r: 7 },
-  { id: 'biblioteca', nome: 'Biblioteca fechada', x: 10.5, y: 30, r: 7 },
+  { id: 'biblioteca', nome: 'Biblioteca Esquecida', x: 10.5, y: 30, r: 7 },
   { id: 'poco', nome: 'Poço da vila', x: 13, y: 16.5, r: 4 },
   { id: 'quadro', nome: 'Quadro de energia', x: 30, y: 10.5, r: 4 },
   { id: 'portao', nome: 'Portão do muro', x: 25, y: 4.5, r: 5 },
@@ -64,5 +65,5 @@ AM.Data.assuntos = {
   operacoes: 'contas básicas', fracoes: 'frações e decimais', porcentagem: 'porcentagem', medidas: 'medidas',
   sequencia: 'ordem dos fatos', coerencia: 'coerência do texto', estrutura: 'estrutura de textos',
   sequencia_passos: 'sequência de passos', repeticao: 'condições e repetição', circuitos: 'circuitos',
-  meio_ambiente: 'meio ambiente', energia: 'fontes de energia',
+  meio_ambiente: 'meio ambiente', energia: 'fontes de energia', catalogacao: 'catalogação por assunto',
 };

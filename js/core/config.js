@@ -4,7 +4,7 @@
   const AM = (window.AM = { Data: {}, UI: {}, Modal: null });
 
   AM.Config = {
-    VERSAO_JOGO: '0.2.0 (Etapa 2 · web)',
+    VERSAO_JOGO: '0.3.0 (Etapa 3 · web)',
     VERSAO_SAVE: 2,
     TILE: 16,
     CHAVE_SAVE: 'alem_dos_muros.save',

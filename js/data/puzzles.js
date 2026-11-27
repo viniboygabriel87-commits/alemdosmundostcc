@@ -276,4 +276,58 @@ AM.Data.puzzles = {
       },
     },
   },
+
+  /* ───────── PORTUGUÊS · catalogar (biblioteca) ───────── */
+  catalogo: {
+    area: 'portugues', tipo: 'classificar', titulo: 'Catálogo da biblioteca',
+    tempoEsperado: { 1: 55, 2: 90, 3: 130 },
+    variantes: {
+      1: {
+        tag: 'catalogacao',
+        enunciado: 'Dona Clara separou os livros por assunto. Escolha um livro e depois a prateleira onde ele deve ficar.',
+        livros: [
+          { id: 'conto', texto: 'Contos e lendas da vila', prateleira: 'historias' },
+          { id: 'atlas', texto: 'Atlas de mapas do Brasil', prateleira: 'mapas' },
+          { id: 'plantas', texto: 'Guia de plantas e sementes', prateleira: 'ciencias' },
+        ],
+        prateleiras: [{ id: 'historias', nome: 'Histórias' }, { id: 'mapas', nome: 'Mapas' }, { id: 'ciencias', nome: 'Ciências' }],
+        dicas: ['Observe o assunto indicado no título de cada livro.', 'Um atlas ajuda a localizar lugares.', 'Contos e lendas são narrativas; plantas pertencem às ciências naturais.'],
+        explicacao: ['Um catálogo organiza livros por assunto para que qualquer pessoa encontre o que procura. Histórias, mapas e ciências são formas diferentes de conhecimento.', 'Uma biblioteca acessível não guarda apenas livros: ela ajuda a comunidade a compartilhar ideias e descobrir novos temas.'],
+        reforco: 'Dica de estudo: procure as palavras-chave do título. “Atlas” fala de mapas; “plantas” é ciência; “contos” contam histórias.',
+      },
+      2: {
+        tag: 'catalogacao',
+        enunciado: 'A biblioteca recebeu mais livros. Organize cada título na prateleira do assunto correspondente.',
+        livros: [
+          { id: 'conto', texto: 'Contos e lendas da vila', prateleira: 'historias' },
+          { id: 'teatro', texto: 'Peças de teatro para crianças', prateleira: 'historias' },
+          { id: 'atlas', texto: 'Atlas de mapas do Brasil', prateleira: 'mapas' },
+          { id: 'ceu', texto: 'Guia ilustrado do céu', prateleira: 'ciencias' },
+          { id: 'plantas', texto: 'Guia de plantas e sementes', prateleira: 'ciencias' },
+        ],
+        prateleiras: [{ id: 'historias', nome: 'Histórias' }, { id: 'mapas', nome: 'Mapas' }, { id: 'ciencias', nome: 'Ciências' }],
+        dicas: ['Peças de teatro contam histórias por meio de falas e cenas.', 'O céu pode ser estudado pela astronomia.', 'O atlas continua sendo o livro de mapas.'],
+        explicacao: ['Os títulos podem dar pistas sobre o campo de estudo: teatro e lendas são literatura, atlas é cartografia e astronomia é ciência.', 'Livros de assuntos próximos podem compartilhar uma prateleira temática, mesmo quando seus formatos são diferentes.'],
+        reforco: 'Dica de estudo: teatro e lendas são histórias; astronomia e plantas são ciências; atlas reúne mapas.',
+      },
+      3: {
+        tag: 'catalogacao',
+        enunciado: 'O último lote veio sem etiquetas. Classifique os livros pelo tema principal, não pelo formato.',
+        livros: [
+          { id: 'conto', texto: 'Contos e lendas da vila', prateleira: 'historias' },
+          { id: 'teatro', texto: 'Peças de teatro para crianças', prateleira: 'historias' },
+          { id: 'poemas', texto: 'Poemas de autores brasileiros', prateleira: 'historias' },
+          { id: 'atlas', texto: 'Atlas de mapas do Brasil', prateleira: 'mapas' },
+          { id: 'mapa', texto: 'Mapas e caminhos da região', prateleira: 'mapas' },
+          { id: 'ceu', texto: 'Guia ilustrado do céu', prateleira: 'ciencias' },
+          { id: 'plantas', texto: 'Guia de plantas e sementes', prateleira: 'ciencias' },
+          { id: 'agua', texto: 'Experiências sobre a água', prateleira: 'ciencias' },
+        ],
+        prateleiras: [{ id: 'historias', nome: 'Histórias' }, { id: 'mapas', nome: 'Mapas' }, { id: 'ciencias', nome: 'Ciências' }],
+        dicas: ['Poemas, peças e lendas são formas de literatura.', 'Um mapa da região continua sendo um recurso de cartografia.', 'Experiências com água e estudos do céu pertencem às ciências.'],
+        explicacao: ['Catalogar significa agrupar por assunto para facilitar a busca. Um poema continua sendo literatura; mapas são cartografia; experiências e observações da natureza são ciências.', 'Na biblioteca reaberta, leitores diferentes poderão encontrar caminhos para novos conhecimentos.'],
+        reforco: 'Dica de estudo: ignore o formato (guia, poema ou atlas) e pergunte qual assunto principal o livro ensina.',
+      },
+    },
+  },
 };

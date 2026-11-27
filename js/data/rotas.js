@@ -43,10 +43,18 @@ AM.Data.npcs = {
     ],
   },
   rafael: {
-    x: 32, y: 15.6, dir: 'down', vel: 26, espera: [5, 10], aparece: ['melhoria:vila_iluminada'],
+    x: 32, y: 15.6, dir: 'down', vel: 26, espera: [5, 10], aparece: ['melhoria:vila_iluminada'], horario: 'noite',
     rotas: [
       { pontos: [{ x: 32, y: 21.5, espera: [3, 6], dir: 'right' }, { x: 32, y: 26, espera: [4, 7], dir: 'down' }] },
       { pontos: [{ x: 32, y: 19, espera: [5, 9], dir: 'left' }] },
+    ],
+  },
+  clara: {
+    x: 14, y: 34.5, dir: 'left', vel: 18, espera: [6, 12],
+    aparece: ['feito:escola_luz.concluir_helena'], horario: 'dia',
+    rotas: [
+      { pontos: [{ x: 18, y: 34.5, espera: [5, 9], dir: 'left' }] },
+      { pontos: [{ x: 14, y: 34.5, espera: [8, 14], dir: 'up' }, { x: 11, y: 34.5, espera: [3, 6], dir: 'down' }] },
     ],
   },
 };

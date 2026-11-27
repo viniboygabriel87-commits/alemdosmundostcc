@@ -11,7 +11,20 @@
   const jogador = { x: 0, y: 0, dir: 'up', anim: 0, passo: 0 };
   const cam = { x: 0, y: 0 };
   let t = 0, stepT = 0, alvo = null, cut = null, fila = [];
-  let luzEscola = 0, luzVila = 0, cantoAnim = 0, descobrirT = 0;
+  let luzEscola = 0, luzVila = 0, cantoAnim = 0, descobrirT = 0, noite = 0;
+  const duracaoDia = 480;
+  function horarioJogo() {
+    const hora = (8 + ((AM.GameState.dados.tempoJogo % duracaoDia) / duracaoDia) * 24) % 24;
+    const h = Math.floor(hora), m = Math.floor((hora - h) * 60);
+    return { hora, texto: String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0'), periodo: hora >= 6 && hora < 18 ? 'Dia' : 'Noite' };
+  }
+  function intensidadeNoite() {
+    const h = horarioJogo().hora;
+    if (h < 5 || h >= 20) return 1;
+    if (h < 7) return (7 - h) / 2;
+    if (h >= 17) return (h - 17) / 3;
+    return 0;
+  }
   const reduz = () => !!AM.Settings.dados.reduzirAnim;
 
   /* ───────── construção ───────── */
@@ -74,13 +87,13 @@
       objetos.push({
         y: y + h, x0: x, x1: x + w, y0: y,
         desenhar(c, ox, oy) {
-          c.drawImage(G.edificio(e, false), x - ox, y - oy);
-          if (e.id === 'escola' && luzEscola > 0.01) { c.globalAlpha = luzEscola; c.drawImage(G.edificio(e, true), x - ox, y - oy); c.globalAlpha = 1; }
+          c.drawImage(G.edificio(e, false, e.id === 'biblioteca' && !!AM.GameState.dados.melhorias.biblioteca_reaberta), x - ox, y - oy);
+          if (e.id === 'escola' && luzEscola * noite > 0.01) { c.globalAlpha = luzEscola * noite; c.drawImage(G.edificio(e, true), x - ox, y - oy); c.globalAlpha = 1; }
         },
       });
       const dc = x + e.porta * T + T;
       if (e.id === 'escola') interativos.push({ id: 'porta_escola', rect: { x: dc - 22, y: y + h - 4, w: 44, h: 14 }, rotulo: 'Examinar', ponto: { x: dc, y: y + h - 34 } });
-      if (e.id === 'biblioteca') interativos.push({ id: 'porta_biblioteca', rect: { x: dc - 22, y: y + h - 4, w: 44, h: 14 }, rotulo: 'Examinar', ponto: { x: dc, y: y + h - 34 } });
+      if (e.id === 'biblioteca') interativos.push({ id: 'porta_biblioteca', rect: { x: dc - 22, y: y + h - 4, w: 44, h: 14 }, rotulo: 'Examinar', ponto: { x: dc, y: y + h - 34 }, marca: 'porta_biblioteca' });
     });
 
     // portão trancado do muro
@@ -138,7 +151,7 @@
     M.lampadas.forEach(([lx, ly], i) => {
       const x = lx * T + 8, y = ly * T + 14;
       colisor(x - 3, y - 4, 6, 4);
-      objetos.push({ y, x0: x - 10, x1: x + 10, y0: y - 32, desenhar(c, ox, oy) { c.drawImage(G.prop('lampada', luzVila > 0.5), x - 7 - ox, y - 29 - oy); } });
+      objetos.push({ y, x0: x - 10, x1: x + 10, y0: y - 32, desenhar(c, ox, oy) { c.drawImage(G.prop('lampada', luzVila * noite > 0.5), x - 7 - ox, y - 29 - oy); } });
       brilhos.push({ x, y: y - 21, tipo: 'lampada', i });
     });
     // bancos
@@ -192,7 +205,7 @@
       interativos.push({ id: 'mural', rect: { x: x - 20, y: y - 14, w: 40, h: 26 }, rotulo: 'Ler', ponto: { x, y: y - 30 } }); }
     // quadro de energia
     { const x = M.quadro.x * T, y = M.quadro.y * T; colisor(x - 6, y - 4, 12, 4);
-      objetos.push({ y, x0: x - 10, x1: x + 10, y0: y - 28, desenhar(c, ox, oy) { c.drawImage(G.prop('quadro', luzEscola > 0.5), x - 8 - ox, y - 25 - oy); } });
+      objetos.push({ y, x0: x - 10, x1: x + 10, y0: y - 28, desenhar(c, ox, oy) { c.drawImage(G.prop('quadro', luzEscola * noite > 0.5), x - 8 - ox, y - 25 - oy); } });
       interativos.push({ id: 'quadro', rect: { x: x - 18, y: y - 14, w: 36, h: 28 }, rotulo: 'Examinar', ponto: { x, y: y - 30 }, marca: 'quadro' }); }
     // cantinho de leitura (melhoria)
     { const x = M.canto_leitura.x * T, y = M.canto_leitura.y * T; colisor(x - 22, y - 6, 44, 6);
@@ -228,7 +241,8 @@
 
   /* ───────── NPCs que andam ───────── */
   const rand = (r) => r[0] + Math.random() * (r[1] - r[0]);
-  const npcVisivel = (n) => !n.d.aparece || AM.Quests.cond(n.d.aparece);
+  const npcVisivel = (n) => (!n.d.aparece || AM.Quests.cond(n.d.aparece)) &&
+    (!n.d.horario || (n.d.horario === 'noite' ? noite >= 0.55 : n.d.horario === 'dia' ? noite < 0.55 : true));
   function criarNPCs() {
     npcs = {};
     Object.keys(AM.Data.npcs).forEach((id) => {
@@ -347,6 +361,7 @@
       jogador.x = pos.x; jogador.y = pos.y; jogador.dir = pos.dir || 'down'; jogador.anim = 0; jogador.passo = 0;
       const m = AM.GameState.dados.melhorias;
       luzEscola = m.escola_energia ? 1 : 0; luzVila = m.vila_iluminada ? 1 : 0; cantoAnim = m.canto_leitura ? 1 : 0;
+      noite = intensidadeNoite();
       cut = null; fila = []; particulas = []; resetarNPCs(); AM.Quests.verificarAuto();
       cam.x = jogador.x - vw / 2; cam.y = jogador.y - vh / 2 - 8; this.limitarCamera();
       for (let i = 0; i < 26; i++) particulas.push({ x: Math.random() * WPX, y: Math.random() * HPX, vx: 6 + Math.random() * 6, vy: 3 + Math.random() * 4, ph: Math.random() * 6, tipo: 'folha', c: Math.random() < 0.6 ? '#8fcf6a' : '#e0b84a' });
@@ -366,6 +381,7 @@
       return interativos.filter((i) => i.marca === marca && (!i.ativo || i.ativo())).map((i) => ({ x: i.rect.x + i.rect.w / 2, y: i.rect.y + i.rect.h / 2 }));
     },
     npcPos(id) { const n = npcs[id]; return n && n.alpha > 0.5 ? { x: n.x, y: n.y } : null; },
+    horario: horarioJogo,
     teletransportar(x, y) { jogador.x = x; jogador.y = y; },
     interagir() {
       if (this.bloqueado() || !alvo) return false;
@@ -382,6 +398,7 @@
     },
     atualizar(dt) {
       t += dt;
+      noite = intensidadeNoite();
       const bloq = this.bloqueado();
       let andando = false;
       if (!bloq) {
@@ -464,29 +481,35 @@
         else { c.globalAlpha = Math.min(1, p.vida / 0.5); c.fillStyle = p.c; c.fillRect(Math.round(p.x - ox), Math.round(p.y - oy), 2, 2); c.globalAlpha = 1; }
       });
       // entardecer + luzes
-      c.fillStyle = 'rgba(20,24,64,0.13)'; c.fillRect(0, 0, vw, vh);
+      c.fillStyle = `rgba(20,24,64,${0.07 + noite * 0.3})`; c.fillRect(0, 0, vw, vh);
       this.desenharLuzes(c, ox, oy);
       this.desenharMarcas(c, ox, oy);
     },
     desenharLuzes(c, ox, oy) {
       c.globalCompositeOperation = 'lighter';
-      if (luzVila > 0.01) {
+      if (luzVila * noite > 0.01) {
         const g = G.brilho(34, 'rgba(255,214,120,0.55)');
-        brilhos.forEach((b) => { const a = luzVila * (reduz() ? 0.85 : 0.8 + 0.1 * Math.sin(t * 3 + b.i)); c.globalAlpha = a; c.drawImage(g, Math.round(b.x - 34 - ox), Math.round(b.y - 30 - oy)); });
+        brilhos.forEach((b) => { const a = luzVila * noite * (reduz() ? 0.85 : 0.8 + 0.1 * Math.sin(t * 3 + b.i)); c.globalAlpha = a; c.drawImage(g, Math.round(b.x - 34 - ox), Math.round(b.y - 30 - oy)); });
         c.globalAlpha = 1;
       }
-      if (luzEscola > 0.01) {
+      if (luzEscola * noite > 0.01) {
         const e = M.edificios.find((x) => x.id === 'escola'), W = e.w * T, H = e.h * T, rh = Math.round(H * 0.46), n = Math.max(2, Math.floor(W / 50));
         const dc = e.porta * T + T, g = G.brilho(30, 'rgba(255,220,140,0.5)'), g2 = G.brilho(40, 'rgba(255,220,140,0.45)');
-        c.globalAlpha = luzEscola;
+        c.globalAlpha = luzEscola * noite;
         for (let i = 0; i < n; i++) { const cx = ((i + 0.5) * W) / n; if (Math.abs(cx - dc) < 30) continue; c.drawImage(g, Math.round(e.x * T + cx - 30 - ox), Math.round(e.y * T + rh + 18 - 30 - oy)); }
         c.drawImage(g2, Math.round(e.x * T + dc - 40 - ox), Math.round(e.y * T + H - 8 - oy));
         c.globalAlpha = 1;
       }
+      if (AM.GameState.dados.melhorias.biblioteca_reaberta && noite > 0.01) {
+        const e = M.edificios.find((x) => x.id === 'biblioteca');
+        c.globalAlpha = noite * 0.8;
+        c.drawImage(G.brilho(42, 'rgba(255,214,140,0.5)'), Math.round((e.x + e.porta + 1) * T - 42 - ox), Math.round((e.y + e.h) * T - 42 - oy));
+        c.globalAlpha = 1;
+      }
       c.globalCompositeOperation = 'source-over';
-      if (luzVila > 0.5 && !reduz()) {
+      if (luzVila > 0.5 && noite > 0.5 && !reduz()) {
         c.fillStyle = '#ffe9a0';
-        for (let i = 0; i < 14; i++) { const fx = 25 * T + Math.cos(t * 0.3 + i * 1.7) * (60 + i * 7), fy = 19 * T + Math.sin(t * 0.4 + i * 2.3) * (40 + i * 3); c.globalAlpha = luzVila * (0.3 + 0.7 * Math.abs(Math.sin(t * 1.6 + i))); c.fillRect(Math.round(fx - ox), Math.round(fy - oy), 1, 1); }
+        for (let i = 0; i < 14; i++) { const fx = 25 * T + Math.cos(t * 0.3 + i * 1.7) * (60 + i * 7), fy = 19 * T + Math.sin(t * 0.4 + i * 2.3) * (40 + i * 3); c.globalAlpha = luzVila * noite * (0.3 + 0.7 * Math.abs(Math.sin(t * 1.6 + i))); c.fillRect(Math.round(fx - ox), Math.round(fy - oy), 1, 1); }
         c.globalAlpha = 1;
       }
     },

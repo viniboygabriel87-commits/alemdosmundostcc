@@ -35,5 +35,10 @@ AM.Data.personagens = {
     pal: { pele: '#a8714a', cabelo: '#cfcfcf', camisa: '#7a8f5a', calca: '#5b4a35', sapato: '#2f2620', extra: '#e9d8a6' },
     estilo: { cabelo: 'curto', oculos: true },
   },
+  clara: {
+    nome: 'Dona Clara', fundo: '#563f68',
+    pal: { pele: '#d6a77f', cabelo: '#c9c4b8', camisa: '#9b6b9b', calca: '#51435c', sapato: '#392c3c', extra: '#f0d39a' },
+    estilo: { cabelo: 'coque', oculos: true },
+  },
   narrador: { nome: '', fundo: '#222a38', pal: {}, estilo: {} },
 };

@@ -61,6 +61,18 @@ AM.Data.missoes = {
     recompensa: { pontos: 20, itens: { apoio_comunidade: 1 }, conhecimento: { portugues: 10 } },
     aoConcluir: [{ flag: 'rafael_amigo' }],
   },
+
+  biblioteca_reabertura: {
+    titulo: 'A Biblioteca Esquecida',
+    tipo: 'secundaria',
+    resumo: 'Dona Clara quer reabrir a biblioteca. Os livros precisam voltar às prateleiras certas antes que a porta possa ser aberta para a vila.',
+    passos: [
+      { id: 'falar_clara', texto: 'Converse com Dona Clara, perto da biblioteca ao sul da vila.', apos: [], alvo: 'clara' },
+      { id: 'catalogar', texto: 'Ajude Dona Clara a catalogar os livros na porta da biblioteca.', apos: ['falar_clara'], alvo: 'porta_biblioteca' },
+    ],
+    recompensa: { pontos: 35, conhecimento: { portugues: 12 } },
+    aoConcluir: [{ melhoria: 'biblioteca_reaberta' }],
+  },
 };
 
 /* Melhorias do cenário. Cada uma gera um benefício real (descrito em "beneficio" e implementado por diálogos, rotas ou sistemas):
@@ -76,4 +88,6 @@ AM.Data.melhorias = {
     beneficio: { tipo: 'atividade', texto: 'A leitura guiada passa a incluir Matemática e Lógica.', areas: ['matematica', 'logica'] } },
   poco_funcionando: { nome: 'Poço funcionando', desc: 'A bomba foi consertada e a água volta a jorrar.',
     beneficio: { tipo: 'personagem', texto: 'Moradores como o Beto passam a visitar o poço, e o Gabriel ganha tempo para ensinar.' } },
+  biblioteca_reaberta: { nome: 'Biblioteca reaberta', desc: 'Dona Clara organizou os livros e abriu as portas para a comunidade.',
+    beneficio: { tipo: 'atividade', texto: 'A Biblioteca Esquecida passa a fazer parte do mapa do mundo.', regiao: 'biblioteca' } },
 };
